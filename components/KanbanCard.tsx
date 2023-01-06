@@ -50,9 +50,15 @@ export default function KanbanCard({
       <Text size="sm" fw={600} mt="sm">
         January - March
       </Text>
-      {items?.map((item, index) => (
-        <KanbanCardItem key={index} {...item} />
-      ))}
+      {items ? (
+        items?.map((item, index) => <KanbanCardItem key={index} {...item} />)
+      ) : (
+        <Paper p="sm" withBorder radius="sm" mt="sm">
+          <Text size="sm" weight={600}>
+            No Task
+          </Text>
+        </Paper>
+      )}
 
       <Button
         compact

@@ -82,6 +82,9 @@ export default function Home() {
               ]}
             />
           </Grid.Col>
+          <Grid.Col xs={3}>
+            <KanbanCard color="pink" onCreateTask={handlerShowModal.toggle} />
+          </Grid.Col>
         </Grid>
       </Container>
     </Layout>

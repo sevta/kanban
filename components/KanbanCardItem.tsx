@@ -75,6 +75,7 @@ export default function KanbanCardItem({
               width={200}
               radius="md"
               position="bottom-end"
+              transition="pop"
               styles={{
                 itemLabel: {
                   fontWeight: 600,
