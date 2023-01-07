@@ -9,7 +9,11 @@ import {
 } from "@mantine/core";
 import { ModalBaseProps } from "types";
 
-export default function ModalSignin({ onCancel, onSubmit }: ModalBaseProps) {
+export default function ModalSignin({
+  onCancel,
+  onSubmit,
+  onSignUp,
+}: { onSignUp?: () => void } & ModalBaseProps) {
   const theme = useMantineTheme();
 
   return (
@@ -21,7 +25,9 @@ export default function ModalSignin({ onCancel, onSubmit }: ModalBaseProps) {
       <Stack mt="lg">
         <Button onClick={() => onSubmit?.()}>Sign in</Button>
         <Divider label="or" labelPosition="center" />
-        <Button variant="light">Sign up</Button>
+        <Button variant="light" onClick={() => onSignUp?.()}>
+          Sign up
+        </Button>
       </Stack>
     </Box>
   );

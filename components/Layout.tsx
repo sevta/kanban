@@ -12,10 +12,12 @@ import { useDisclosure } from "@mantine/hooks";
 import { IconPlus } from "@tabler/icons";
 import ModalCreateGroup from "./ModalCreateGroup";
 import ModalSignin from "./ModalSignin";
+import ModalSignUp from "./ModalSignUp";
 
 export default function Layout({ children }: AppShellProps) {
   const [showModalCreateGroup, handlerModalCreateGroup] = useDisclosure(false);
   const [showModalSignin, handlerModalSignin] = useDisclosure(false);
+  const [showModalSignUp, handlerModalSignUp] = useDisclosure(false);
 
   return (
     <AppShell
@@ -52,12 +54,30 @@ export default function Layout({ children }: AppShellProps) {
                 </Button>
               </Flex>
               <Modal
+                opened={showModalSignUp}
+                onClose={handlerModalSignUp.close}
+                radius="md"
+                title={<Title order={4}>Sign Up</Title>}
+              >
+                <ModalSignUp
+                  onSignIn={() => {
+                    handlerModalSignUp.close();
+                    handlerModalSignin.open();
+                  }}
+                ></ModalSignUp>
+              </Modal>
+              <Modal
                 opened={showModalSignin}
                 onClose={handlerModalSignin.close}
                 radius="md"
                 title={<Title order={4}>Sign In</Title>}
               >
-                <ModalSignin></ModalSignin>
+                <ModalSignin
+                  onSignUp={() => {
+                    handlerModalSignin.close();
+                    handlerModalSignUp.open();
+                  }}
+                ></ModalSignin>
               </Modal>
               <Button
                 size="xs"
