@@ -1,10 +1,44 @@
 import { Container, Grid, Modal, Title } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
+import { useDisclosure, useLocalStorage } from "@mantine/hooks";
+import axios from "axios";
 import KanbanCard from "components/KanbanCard";
 import ModalCreateTask from "components/ModalCreateTask";
+import { useEffect, useState } from "react";
+import { Enum } from "types";
+import { apiUrl } from "utils";
 import Layout from "../components/Layout";
+
 export default function Home() {
   const [showModal, handlerShowModal] = useDisclosure(false);
+  const [todos, setTodos] = useState<any>([]);
+  const [value] = useLocalStorage({
+    key: Enum.KanbanAuth,
+    serialize: JSON.stringify,
+    deserialize: (str) => (str === undefined ? "" : JSON.parse(str)),
+  });
+
+  // const { data, error } = useSWR(
+  //   [apiUrl + "todos", value?.auth_token],
+  //   fetcher
+  // );
+
+  async function getData() {
+    try {
+      const resp = await axios.get(apiUrl + "todos", {
+        headers: {
+          Authorization: `Bearer ${value?.auth_token}`,
+        },
+      });
+      setTodos(resp.data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  useEffect(() => {
+    if (value?.auth_token) {
+      getData();
+    }
+  }, [value]);
 
   return (
     <Layout>
@@ -18,72 +52,13 @@ export default function Home() {
         >
           <ModalCreateTask onCancel={handlerShowModal.close} />
         </Modal>
+
         <Grid>
-          <Grid.Col xs={3}>
-            <KanbanCard
-              onCreateTask={handlerShowModal.toggle}
-              items={[
-                {
-                  name: "Redesign web",
-                  progress: 50,
-                  done: false,
-                  onMoveLeft() {
-                    alert("move left");
-                  },
-                  onMoveRight() {
-                    alert("on move right");
-                  },
-                  onDelete() {
-                    alert("on delete");
-                  },
-                  onEdit() {
-                    alert("on edit");
-                  },
-                },
-                {
-                  name: "Bundle interplanetary analytics for improved transmission",
-                  progress: 100,
-                  done: true,
-                },
-                {
-                  name: "Bundle interplanetary analytics for improved transmission",
-                  progress: 24,
-                  done: false,
-                },
-              ]}
-            />
-          </Grid.Col>
-          <Grid.Col xs={3}>
-            <KanbanCard
-              color="orange"
-              onCreateTask={handlerShowModal.toggle}
-              items={[
-                {
-                  name: "Redesign web",
-                  progress: 50,
-                  done: false,
-                },
-                {
-                  name: "Bundle interplanetary analytics for improved transmission",
-                  progress: 100,
-                  done: true,
-                },
-                {
-                  name: "Bundle interplanetary analytics for improved transmission",
-                  progress: 24,
-                  done: false,
-                },
-                {
-                  name: "Bundle interplanetary analytics for improved transmission",
-                  progress: 62,
-                  done: false,
-                },
-              ]}
-            />
-          </Grid.Col>
-          <Grid.Col xs={3}>
-            <KanbanCard color="pink" onCreateTask={handlerShowModal.toggle} />
-          </Grid.Col>
+          {todos?.map((todo: any, index: number) => (
+            <Grid.Col xs={3} key={index}>
+              <KanbanCard title={todo.title} />
+            </Grid.Col>
+          ))}
         </Grid>
       </Container>
     </Layout>

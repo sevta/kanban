@@ -13,6 +13,7 @@ import KanbanCardItem, { KanbanCardItemProps } from "./KanbanCardItem";
 interface KanbanCardProps {
   onCreateTask?: () => void;
   color?: MantineColor;
+  title?: string;
   items?: KanbanCardItemProps[];
 }
 
@@ -20,6 +21,7 @@ export default function KanbanCard({
   onCreateTask,
   color = "cyan",
   items,
+  title,
 }: KanbanCardProps) {
   const theme = useMantineTheme();
   return (
@@ -45,7 +47,7 @@ export default function KanbanCard({
       }}
     >
       <Badge radius="sm" variant="outline" color={color}>
-        Group Task 1
+        {title}
       </Badge>
       <Text size="sm" fw={600} mt="sm">
         January - March

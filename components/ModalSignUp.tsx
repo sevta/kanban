@@ -7,8 +7,11 @@ import {
   TextInput,
 } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
+import { useLocalStorage } from "@mantine/hooks";
+import { showNotification } from "@mantine/notifications";
 import axios from "axios";
-import { ModalBaseProps } from "types";
+import { useState } from "react";
+import { Enum, ModalBaseProps } from "types";
 import { apiUrl } from "utils";
 import { z } from "zod";
 
@@ -23,7 +26,17 @@ type SignUpType = z.infer<typeof schema>;
 
 export default function ModalSignUp({
   onSignIn,
-}: { onSignIn?: () => void } & ModalBaseProps) {
+  onSuccessSignUp,
+}: { onSignIn?: () => void; onSuccessSignUp?: () => void } & ModalBaseProps) {
+  const [_, setValue] = useLocalStorage({
+    key: Enum.KanbanAuth,
+    defaultValue: {
+      email: "",
+      auth_token: "",
+    },
+  });
+  const [loading, setLoading] = useState(false);
+
   const form = useForm<SignUpType>({
     initialValues: {
       name: "",
@@ -36,13 +49,23 @@ export default function ModalSignUp({
   });
 
   async function handleSubmit(values: SignUpType) {
+    setLoading(true);
     try {
       const resp = await axios.post(apiUrl + "signup", {
         ...values,
       });
-      console.log({ resp });
-    } catch (error) {
-      console.log({ error });
+      if (resp?.statusText === "Created") {
+        setValue({
+          email: form.values.email,
+          auth_token: resp?.data?.auth_token,
+        });
+      }
+      showNotification({ message: resp?.data.message });
+      onSuccessSignUp?.();
+    } catch (error: any) {
+      showNotification({ color: "red", message: error?.message || "error" });
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -73,7 +96,9 @@ export default function ModalSignUp({
           />
         </Stack>
         <Stack mt="lg">
-          <Button type="submit">Sign Up</Button>
+          <Button type="submit" loading={loading}>
+            Sign Up
+          </Button>
           <Divider label="or" labelPosition="center" />
           <Button variant="light" onClick={() => onSignIn?.()}>
             Sign In
