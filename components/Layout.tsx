@@ -11,9 +11,12 @@ import {
 import { useDisclosure } from "@mantine/hooks";
 import { IconPlus } from "@tabler/icons";
 import ModalCreateGroup from "./ModalCreateGroup";
+import ModalSignin from "./ModalSignin";
 
 export default function Layout({ children }: AppShellProps) {
   const [showModalCreateGroup, handlerModalCreateGroup] = useDisclosure(false);
+  const [showModalSignin, handlerModalSignin] = useDisclosure(false);
+
   return (
     <AppShell
       header={
@@ -25,26 +28,44 @@ export default function Layout({ children }: AppShellProps) {
               height: "100%",
             }}
           >
-            <Flex>
-              <Title mr="md" order={4}>
-                Product Roadmap
-              </Title>
+            <Flex justify="space-between" w="100%">
+              <Flex>
+                <Title mr="md" order={4}>
+                  Product Roadmap
+                </Title>
+                <Modal
+                  shadow="sm"
+                  opened={showModalCreateGroup}
+                  onClose={handlerModalCreateGroup.close}
+                  title={<Title order={4}>Add New Group</Title>}
+                  radius="md"
+                >
+                  <ModalCreateGroup onCancel={handlerModalCreateGroup.close} />
+                </Modal>
+                <Button
+                  size="xs"
+                  leftIcon={<IconPlus size={16} />}
+                  color="cyan.8"
+                  onClick={handlerModalCreateGroup.toggle}
+                >
+                  Add New Group
+                </Button>
+              </Flex>
               <Modal
-                shadow="sm"
-                opened={showModalCreateGroup}
-                onClose={handlerModalCreateGroup.close}
-                title={<Title order={4}>Add New Group</Title>}
+                opened={showModalSignin}
+                onClose={handlerModalSignin.close}
                 radius="md"
+                title={<Title order={4}>Sign In</Title>}
               >
-                <ModalCreateGroup onCancel={handlerModalCreateGroup.close} />
+                <ModalSignin></ModalSignin>
               </Modal>
               <Button
                 size="xs"
-                leftIcon={<IconPlus size={16} />}
+                variant="light"
                 color="cyan.8"
-                onClick={handlerModalCreateGroup.toggle}
+                onClick={handlerModalSignin.toggle}
               >
-                Add New Group
+                Sign in
               </Button>
             </Flex>
           </Container>

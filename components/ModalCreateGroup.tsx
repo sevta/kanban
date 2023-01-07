@@ -7,35 +7,19 @@ import {
   TextInput,
   useMantineTheme,
 } from "@mantine/core";
-
-interface ModalCreateGroupProps {
-  onCancel?: () => void;
-  onSave?: () => void;
-}
+import { ModalBaseProps } from "types";
 
 export default function ModalCreateGroup({
   onCancel,
-  onSave,
-}: ModalCreateGroupProps) {
+  onSubmit,
+}: ModalBaseProps) {
   const theme = useMantineTheme();
 
   return (
     <Box>
       <Stack>
-        <TextInput
-          styles={{
-            label: { fontSize: 12, fontWeight: 600, marginBottom: 6 },
-          }}
-          placeholder="Placeholder"
-          label="Title"
-        />
-        <Textarea
-          styles={{
-            label: { fontSize: 12, fontWeight: 600, marginBottom: 6 },
-          }}
-          placeholder="Placeholder"
-          label="Description"
-        />
+        <TextInput placeholder="Placeholder" label="Title" />
+        <Textarea placeholder="Placeholder" label="Description" />
       </Stack>
       <Group mt="lg" spacing="sm" position="right">
         <Button
@@ -52,7 +36,7 @@ export default function ModalCreateGroup({
         >
           Cancel
         </Button>
-        <Button onClick={() => onSave?.()}>Submit</Button>
+        <Button onClick={() => onSubmit?.()}>Submit</Button>
       </Group>
     </Box>
   );

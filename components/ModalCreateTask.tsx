@@ -8,37 +8,20 @@ import {
   TextInput,
   useMantineTheme,
 } from "@mantine/core";
-
-interface ModalCreateTaskProps {
-  onCancel?: () => void;
-  onSave?: () => void;
-}
+import { ModalBaseProps } from "types";
 
 export default function ModalCreateTask({
   onCancel,
-  onSave,
-}: ModalCreateTaskProps) {
+  onSubmit,
+}: ModalBaseProps) {
   const theme = useMantineTheme();
 
   return (
     <Box>
       <Stack>
-        <TextInput
-          styles={{
-            label: { fontSize: 12, fontWeight: 600, marginBottom: 6 },
-          }}
-          placeholder="Type your task"
-          label="Task Name"
-        />
+        <TextInput placeholder="Type your task" label="Task Name" />
         <Flex w="40%">
-          <NumberInput
-            styles={{
-              label: { fontSize: 12, fontWeight: 600, marginBottom: 6 },
-            }}
-            max={100}
-            placeholder="70%"
-            label="Progress"
-          />
+          <NumberInput max={100} placeholder="70%" label="Progress" />
         </Flex>
       </Stack>
       <Group mt="lg" spacing="sm" position="right">
@@ -56,7 +39,7 @@ export default function ModalCreateTask({
         >
           Cancel
         </Button>
-        <Button onClick={() => onSave?.()}>Save Task</Button>
+        <Button onClick={() => onSubmit?.()}>Save Task</Button>
       </Group>
     </Box>
   );

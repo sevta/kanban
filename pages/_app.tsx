@@ -36,6 +36,7 @@ export default function App(props: AppProps) {
           },
           defaultRadius: "md",
           primaryColor: "cyan",
+
           focusRingStyles: {
             resetStyles: () => ({ outline: "none" }),
 
@@ -48,6 +49,11 @@ export default function App(props: AppProps) {
             }),
           },
           components: {
+            InputWrapper: {
+              styles: {
+                label: { fontSize: 12, fontWeight: 600, marginBottom: 6 },
+              },
+            },
             Button: {
               defaultProps: {
                 radius: "md",

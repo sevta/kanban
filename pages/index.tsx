@@ -3,7 +3,6 @@ import { useDisclosure } from "@mantine/hooks";
 import KanbanCard from "components/KanbanCard";
 import ModalCreateTask from "components/ModalCreateTask";
 import Layout from "../components/Layout";
-
 export default function Home() {
   const [showModal, handlerShowModal] = useDisclosure(false);
 
